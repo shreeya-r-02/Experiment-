@@ -75,6 +75,10 @@ button{
   background:#ff4d6d;
   color:#fff;
   box-shadow:0 10px 24px rgba(255,77,109,.35);
+
+  /* ✅ Disabled initially */
+  opacity:0.5;
+  pointer-events:none;
 }
 
 #no{
@@ -104,7 +108,7 @@ button{
 <div class="card" id="card">
   <img src="IMG_5766.jpeg" alt="💛">
 
-  <h1>Will you be my Valentine?</h1>
+  <h1>Will you be my Valentine? 🤍</h1>
 
   <p id="text">Just tap what feels right ✨</p>
 
@@ -124,51 +128,65 @@ let yesSize = 1;
 let noFade = 1;
 let i = 0;
 
-/* 🔁 PLAYFUL LOOP TEXTS */
+/* 🔁 Your Tamil playful prompts */
 const lines = [
-  "No sollriya🙂",
-  "Angel ku no solriya",
+  "No sollriya 🙂",
+  "Angel ku no solriya 😌",
   "Nalla yosichtiya 🤨",
-  "NO chumma decoration ku dhan vechen",
-  "Eheii dho da",
-  "Maran😒",
-  "Idhan mudiva",
-  "Sirikra dhane🤠",
-  "Seri correct ah amuthu🌝"
+  "NO chumma decoration ku dhan vechen 😏",
+  "Eheii… dho da 😄",
+  "Maran 😒",
+  "Idhan mudiva?",
+  "Sirikra dhane 🤠",
+  "Seri seri… correct ah amuthu 🌝"
 ];
 
 function dodge(){
+
+  // Move NO randomly
   const x = Math.random()*260 - 130;
   const y = Math.random()*160 - 80;
-
   no.style.transform = `translate(${x}px,${y}px) scale(${noFade})`;
 
+  // YES grows slowly
   yesSize += 0.12;
-  noFade -= 0.06;
-
   yes.style.transform = `scale(${yesSize})`;
+
+  // NO fades slowly
+  noFade -= 0.06;
   no.style.opacity = noFade;
 
-  text.innerText = lines[i % lines.length];
-  i++;
+  // Show current prompt
+  text.innerText = lines[i];
 
-  if(noFade < 0.4){
-    no.innerText = "😅";
+  /* ✅ Unlock YES ONLY after LAST prompt appears */
+  if(i === lines.length - 1){
+    yes.style.pointerEvents = "auto";
+    yes.style.opacity = "1";
+    yes.innerText = "YES 💖 (now!)";
+  }
+
+  // Stop increasing after last prompt
+  if(i < lines.length - 1){
+    i++;
   }
 }
 
+// NO dodges forever
 no.addEventListener("mouseover", dodge);
 no.addEventListener("touchstart", dodge);
 
+// YES click ending
 yes.addEventListener("click", ()=>{
   card.innerHTML = `
     <h1>💖</h1>
-    <p>Epdi easy ah madakunena😋</p>
-    <p>Valentines vaazhthukal myy chellakutty🥰😚</p>
+    <p>That was easy 😌</p>
+    <p>Happy Valentine’s Day ✨</p>
   `;
   celebrate();
 });
 
+// Sparkle celebration
 function celebrate(){
   for(let i=0;i<30;i++){
     const s = document.createElement("div");
